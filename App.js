@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as SplashScreen from "expo-splash-screen";
 import LoginScreen from "./screens/LoginScreen";
 import { Cabin_500Medium, Cabin_400Regular, Cabin_600SemiBold } from "@expo-google-fonts/cabin";
@@ -28,14 +29,14 @@ export default function App() {
   }
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
-    </>
+    </GestureHandlerRootView>
   );
 }
 

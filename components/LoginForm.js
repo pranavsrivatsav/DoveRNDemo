@@ -17,7 +17,6 @@ const LoginForm = () => {
     <View style={styles.container}>
       <OutlineInput label={"Mobile Number"} />
       <NextButton />
-      <FeatureCarousel />
     </View>
   );
 };
