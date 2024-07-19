@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import Header from "../components/Header";
 import colors from "../constants/colors";
@@ -22,10 +22,10 @@ const LoginScreen = ({ navigation }) => {
 
 const LoginContent = () => {
   return (
-    <View style={styles.contentContainer}>
-      <LoginForm />
-      <FeatureCarousel />
-    </View>
+      <View style={styles.contentContainer}>
+        <LoginForm />
+        <FeatureCarousel />
+      </View>
   );
 };
 
@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: 175
+    marginBottom: Keyboard.isVisible ? 50 : 175,
   },
 });
