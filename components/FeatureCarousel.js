@@ -48,11 +48,11 @@ const FeatureCarousel = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ height: width / 2 }}>
+      <View style={{ height: 200}}>
         <Carousel
           ref={ref}
           width={width}
-          height={width / 2}
+          height={200}
           data={featuresArray}
           onProgressChange={progress}
           renderItem={renderItem}
@@ -102,5 +102,5 @@ const styles = StyleSheet.create({
   paginationActiveDotStyle: {
     backgroundColor: colors.primaryColor,
   },
-  paginationContainerStyle: { gap: 20, marginTop: 20 },
+  paginationContainerStyle: { gap: 20, marginTop: 30 },
 });
