@@ -4,8 +4,14 @@ import Header from "../components/Header";
 import colors from "../constants/colors";
 import LoginForm from "../components/LoginForm";
 import FeatureCarousel from "../components/FeatureCarousel";
+import { useSelector } from "react-redux";
+import Otp from "../components/Otp";
 
 const LoginScreen = ({ navigation }) => {
+  const pageNo = useSelector(state => state.login.pageNo);
+
+  console.log("pageNo", pageNo)
+
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -15,7 +21,8 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header />
-      <LoginContent />
+      { pageNo === 1 && <LoginContent />}
+      { pageNo === 2 && <Otp />}
     </View>
   );
 };
@@ -38,6 +45,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: Keyboard.isVisible ? 50 : 175,
+    marginBottom: Keyboard.isVisible() ? 50 : 175,
   },
 });

@@ -8,6 +8,8 @@ import * as SplashScreen from "expo-splash-screen";
 import LoginScreen from "./screens/LoginScreen";
 import { Cabin_500Medium, Cabin_400Regular, Cabin_600SemiBold } from "@expo-google-fonts/cabin";
 import { useEffect } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -30,11 +32,13 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+      </Provider>
       <StatusBar style="auto" />
     </GestureHandlerRootView>
   );

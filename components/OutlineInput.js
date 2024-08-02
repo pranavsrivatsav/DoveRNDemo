@@ -2,10 +2,10 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import colors from "../constants/colors";
 
-const OutlineInput = ({ placeholder, width, height, label, value  }) => {
+const OutlineInput = ({ placeholder, width, height, label, value, onChangeText}) => {
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input} value={value} enterKeyHint="next" inputMode="tel" maxLength={10} keyboardType="numeric"/>
+      <TextInput style={styles.input} value={value} enterKeyHint="next" inputMode="tel" maxLength={10} keyboardType="numeric" onChangeText={onChangeText}/>
       <Text style={styles.label}>{label}</Text>
     </View>
   );

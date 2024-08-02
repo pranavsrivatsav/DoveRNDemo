@@ -6,10 +6,6 @@ import NextButtonArrow from '../assets/images/nextButtonArrow.svg'
 const NextButtonRound = () => {
   return (
     <View style={styles.container}>
-      {/* <Image
-        source={require("../assets/images/nextButtonArrow.svg")}
-        style={{ width: 13, height: 40}}
-      /> */}
       <NextButtonArrow width={13}/>
     </View>
   );
