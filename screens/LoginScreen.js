@@ -6,10 +6,12 @@ import FeatureCarousel from "../components/FeatureCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import Otp from "../components/Otp";
 import { gotoPrevPage } from "../store/slices/loginSlice";
+import useKeyboardStatus from "../customHooks/useKeyboardStatus";
 
 const LoginScreen = ({ navigation }) => {
   const pageNo = useSelector(state => state.login.pageNo);
   const dispatch = useDispatch();
+  const keyboardStatus = useKeyboardStatus();
 
   useEffect(() => {
     navigation.setOptions({
@@ -18,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {marginBottom: keyboardStatus === 'open' ? 50 : 175}]}>
       <Header title={'LOGIN OR REGISTER'} showBackButton={pageNo === 2} onBackPress={()=>dispatch(gotoPrevPage())}/>
       { pageNo === 1 && <LoginContent />}
       { pageNo === 2 && <Otp />}
@@ -44,6 +46,5 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: Keyboard.isVisible() ? 50 : 175,
   },
 });
