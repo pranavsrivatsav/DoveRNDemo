@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOtp } from "../store/slices/loginSlice";
 import colors from "../constants/colors";
 import useInterval from "../customHooks/useInterval";
+import PrimaryButton from "./PrimaryButton";
 
 const CELL_COUNT = 4;
 const RESEND_DELAY = 6; //in seconds
@@ -93,18 +94,18 @@ const Otp = () => {
 
   function renderResend() {
     return (
-      <View>
+      <View style={styles.resendContainer}>
         {!enableResend && (
           <Text>Resend OTP in {resendCountdown} Seconds...</Text>
         )}
         {enableResend && (
-          <Pressable onPress={resendOtp}>
-            <Text>Resend OTP</Text>
-          </Pressable>
+          <PrimaryButton onPress={resendOtp}>Resend OTP</PrimaryButton>
         )}
       </View>
     );
   }
+
+
 
   function resetTimer() {
     setEnableResend(false);
@@ -117,8 +118,6 @@ const Otp = () => {
   }
 
   function decreaseCountDown() {
-    console.log('countdown', resendCountdown)
-
     if(enableResend) return;
     
     if(resendCountdown <= 1) {
@@ -133,7 +132,7 @@ const Otp = () => {
 const styles = StyleSheet.create({
   root: { flex: 1, padding: 20 },
   title: { textAlign: "center", fontSize: 15, fontFamily: "Cabin_400Regular" },
-  codeFieldRoot: { marginTop: 20, gap: 20, alignSelf: "center" },
+  codeFieldRoot: { marginTop: 10, gap: 20, alignSelf: "center" },
   cell: {
     width: 50,
     height: 60,
@@ -148,6 +147,10 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: colors.primaryColor,
   },
+  resendContainer: {
+    alignItems: 'center',
+    marginTop: 15
+  }
 });
 
 export default Otp;

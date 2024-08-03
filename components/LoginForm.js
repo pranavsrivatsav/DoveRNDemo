@@ -26,7 +26,7 @@ const LoginForm = () => {
             dispatch(setMobileNumber(value));
           }}
         />
-      <NextButton onPress={onPressNext}/>
+      {mobileNumber?.length === 10 && <NextButton onPress={onPressNext}/>}
     </View>
   );
 

@@ -1,16 +1,15 @@
 import { Keyboard, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import Header from "../components/Header";
-import colors from "../constants/colors";
 import LoginForm from "../components/LoginForm";
 import FeatureCarousel from "../components/FeatureCarousel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Otp from "../components/Otp";
+import { gotoPrevPage } from "../store/slices/loginSlice";
 
 const LoginScreen = ({ navigation }) => {
   const pageNo = useSelector(state => state.login.pageNo);
-
-  console.log("pageNo", pageNo)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({
@@ -20,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header title={'LOGIN OR REGISTER'} showBackButton={pageNo === 2} onBackPress={()=>dispatch(gotoPrevPage())}/>
       { pageNo === 1 && <LoginContent />}
       { pageNo === 2 && <Otp />}
     </View>
