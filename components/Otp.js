@@ -14,24 +14,17 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
-import { useDispatch, useSelector } from "react-redux";
-import { setOtp } from "../store/slices/loginSlice";
 import colors from "../constants/colors";
 import useInterval from "../customHooks/useInterval";
 import PrimaryButton from "./PrimaryButton";
 
-const CELL_COUNT = 4;
-const RESEND_DELAY = 6; //in seconds
+const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpError, loading, resendDelay=30}) => {
+  const [value, setValue] = useState();
 
-const Otp = () => {
-  const dispatch = useDispatch();
-  const loginStore = useSelector((state) => state.login);
-  const { mobileNumber, otp: value } = loginStore;
-
-  const [resendCountdown, setResendCountdown] = useState(RESEND_DELAY);
+  const [resendCountdown, setResendCountdown] = useState(resendDelay);
   const [enableResend, setEnableResend] = useState(false);
 
-  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+  const ref = useBlurOnFulfill({ value, otpLength });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
@@ -39,6 +32,20 @@ const Otp = () => {
 
   //when delay is null - no new interval will be created (and any existing intervals will be cleared by cleanup funtion)
   useInterval(decreaseCountDown, enableResend ? null : 1000); 
+
+  //useEffect to submit otp
+  useEffect(()=>{
+    if(value?.length === otpLength) {
+      (async()=>{
+        await onSubmit();
+      })()
+    }
+  }, [value])
+
+  //useEffect to remove error
+  useEffect(()=>{
+    setOtpError();
+  }, [value && otpError])
 
 
   return (
@@ -50,7 +57,7 @@ const Otp = () => {
         // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
         value={value}
         onChangeText={setValue}
-        cellCount={CELL_COUNT}
+        cellCount={otpLength}
         rootStyle={styles.codeFieldRoot}
         keyboardType="number-pad"
         textContentType="oneTimeCode"
@@ -62,12 +69,9 @@ const Otp = () => {
         renderCell={renderOtpCell}
       />
       {renderResend()}
+      {loading && <Text>Loading...</Text>}
     </View>
   );
-
-  function setValue(value) {
-    dispatch(setOtp(value));
-  }
 
   function renderTitle() {
     return (
@@ -84,7 +88,7 @@ const Otp = () => {
     return (
       <Text
         key={index}
-        style={[styles.cell, isFocused && styles.focusCell]}
+        style={[styles.cell, isFocused && styles.focusCell, otpError && styles.cellError]}
         onLayout={getCellOnLayoutHandler(index)}
       >
         {symbol || (isFocused ? <Cursor /> : null)}
@@ -108,12 +112,13 @@ const Otp = () => {
 
 
   function resetTimer() {
+    setValue('');
     setEnableResend(false);
-    setResendCountdown(RESEND_DELAY);
+    setResendCountdown(resendDelay);
   }
 
-  function resendOtp() {
-    console.log("resending OTP");
+  async function resendOtp() {
+    await onResend();
     resetTimer();
   }
 
@@ -150,6 +155,9 @@ const styles = StyleSheet.create({
   resendContainer: {
     alignItems: 'center',
     marginTop: 15
+  },
+  cellError: {
+    borderColor: colors.warningColor
   }
 });
 

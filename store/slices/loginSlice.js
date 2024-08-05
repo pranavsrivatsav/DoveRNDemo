@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { act } from "react";
 
 const loginSlice = createSlice({
   name: "login",
@@ -7,14 +8,15 @@ const loginSlice = createSlice({
     otp: "",
     otpError: false,
     otpVerified: false,
+    otpLoading: false,
     pageNo: 1,
   },
   reducers: {
     setMobileNumber: (state, action) => {
       state.mobileNumber = action.payload;
     },
-    setOtp: (state, action) => {
-      state.otp = action.payload;
+    setOtpLoading: (state, action) => {
+      state.otpLoading = action.payload;
     },
     setOtpError: (state, action) => {
       state.otpError = action.payload;
@@ -33,7 +35,7 @@ const loginSlice = createSlice({
 
 export const {
   setMobileNumber,
-  setOtp,
+  setOtpLoading,
   setOtpError,
   setOtpVerified,
   gotoNextPage,
