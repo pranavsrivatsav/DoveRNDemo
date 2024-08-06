@@ -42,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
         dispatch(setOtpLoading(true));
         await delay(2000);
         if(value !== '4444') {
-          setOtpError('Invalid OTP. Please try again')
+          dispatch(setOtpError('Invalid OTP. Please try again'));
         }
         dispatch(setOtpLoading(false));
       },

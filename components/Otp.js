@@ -18,7 +18,16 @@ import colors from "../constants/colors";
 import useInterval from "../customHooks/useInterval";
 import PrimaryButton from "./PrimaryButton";
 
-const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpError, loading, resendDelay=30}) => {
+const Otp = ({
+  mobileNumber,
+  onSubmit,
+  onResend,
+  otpLength = 4,
+  otpError,
+  setOtpError,
+  loading,
+  resendDelay = 30,
+}) => {
   const [value, setValue] = useState();
 
   const [resendCountdown, setResendCountdown] = useState(resendDelay);
@@ -31,22 +40,21 @@ const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpErr
   });
 
   //when delay is null - no new interval will be created (and any existing intervals will be cleared by cleanup funtion)
-  useInterval(decreaseCountDown, enableResend ? null : 1000); 
+  useInterval(decreaseCountDown, enableResend ? null : 1000);
 
   //useEffect to submit otp
-  useEffect(()=>{
-    if(value?.length === otpLength) {
-      (async()=>{
-        await onSubmit();
-      })()
+  useEffect(() => {
+    if (value?.length === otpLength) {
+      (async () => {
+        await onSubmit(value);
+      })();
     }
-  }, [value])
 
-  //useEffect to remove error
-  useEffect(()=>{
-    setOtpError();
-  }, [value && otpError])
-
+    //if value has changed and otpError is present - remove otpError
+    if (value && otpError) {
+      setOtpError(null);
+    }
+  }, [value]);
 
   return (
     <View style={styles.root}>
@@ -68,6 +76,7 @@ const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpErr
         testID="my-code-input"
         renderCell={renderOtpCell}
       />
+      {otpError && renderOtpError()}
       {renderResend()}
       {loading && <Text>Loading...</Text>}
     </View>
@@ -88,7 +97,11 @@ const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpErr
     return (
       <Text
         key={index}
-        style={[styles.cell, isFocused && styles.focusCell, otpError && styles.cellError]}
+        style={[
+          styles.cell,
+          isFocused && styles.focusCell,
+          otpError && styles.cellError,
+        ]}
         onLayout={getCellOnLayoutHandler(index)}
       >
         {symbol || (isFocused ? <Cursor /> : null)}
@@ -109,10 +122,16 @@ const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpErr
     );
   }
 
-
+  function renderOtpError() {
+    return (
+      <View style={styles.otpErrorContainer}>
+          <Text style={styles.otpErrorText}>{otpError}</Text>
+      </View>
+    );
+  }
 
   function resetTimer() {
-    setValue('');
+    setValue("");
     setEnableResend(false);
     setResendCountdown(resendDelay);
   }
@@ -123,14 +142,14 @@ const Otp = ({mobileNumber, onSubmit, onResend, otpLength=4, otpError, setOtpErr
   }
 
   function decreaseCountDown() {
-    if(enableResend) return;
-    
-    if(resendCountdown <= 1) {
+    if (enableResend) return;
+
+    if (resendCountdown <= 1) {
       setEnableResend(true);
       return;
-    } 
+    }
 
-    setResendCountdown(prevCountdown => prevCountdown -1);
+    setResendCountdown((prevCountdown) => prevCountdown - 1);
   }
 };
 
@@ -147,17 +166,28 @@ const styles = StyleSheet.create({
     borderColor: colors.primaryColor,
     borderRadius: 10,
     textAlign: "center",
+    color: colors.primaryColor
   },
   focusCell: {
     borderWidth: 3,
     borderColor: colors.primaryColor,
   },
   resendContainer: {
-    alignItems: 'center',
-    marginTop: 15
+    alignItems: "center",
+    marginTop: 15,
   },
   cellError: {
-    borderColor: colors.warningColor
+    borderColor: colors.warningColor,
+    color: colors.warningColor
+  },
+  otpErrorText: {
+    fontSize: 14,
+    color: colors.warningColor,
+  },
+  otpErrorContainer: {
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
   }
 });
 
