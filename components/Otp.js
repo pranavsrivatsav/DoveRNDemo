@@ -25,7 +25,6 @@ const Otp = ({
   otpLength = 4,
   otpError,
   setOtpError,
-  loading,
   resendDelay = 30,
 }) => {
   const [value, setValue] = useState();
@@ -78,7 +77,6 @@ const Otp = ({
       />
       {otpError && renderOtpError()}
       {renderResend()}
-      {loading && <Text>Loading...</Text>}
     </View>
   );
 

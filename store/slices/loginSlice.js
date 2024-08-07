@@ -8,15 +8,24 @@ const loginSlice = createSlice({
     otp: "",
     otpError: false,
     otpVerified: false,
-    otpLoading: false,
+    loading: false,
+    loadingMessage: "",
     pageNo: 1,
   },
   reducers: {
     setMobileNumber: (state, action) => {
       state.mobileNumber = action.payload;
     },
-    setOtpLoading: (state, action) => {
-      state.otpLoading = action.payload;
+    showLoader: (state, action) => {
+      state.loading = true;
+      state.loadingMessage = action.payload;
+    },
+    setLoadingMessage: (state, action) => {
+      state.loadingMessage = action.payload;
+    },
+    removeLoader: (state) => {
+      state.loading = false;
+      state.loadingMessage = "";
     },
     setOtpError: (state, action) => {
       state.otpError = action.payload;
@@ -35,7 +44,9 @@ const loginSlice = createSlice({
 
 export const {
   setMobileNumber,
-  setOtpLoading,
+  showLoader,
+  setLoadingMessage,
+  removeLoader,
   setOtpError,
   setOtpVerified,
   gotoNextPage,
