@@ -1,11 +1,31 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect } from "react";
 import Header from "../components/Header";
-import colors from "../constants/colors";
-import LoginForm from "../components/LoginForm";
-import FeatureCarousel from "../components/FeatureCarousel";
+import LoginForm from "../components/LoginScreen/LoginForm";
+import FeatureCarousel from "../components/LoginScreen/FeatureCarousel";
+import { useDispatch, useSelector } from "react-redux";
+import Otp from "../components/Otp";
+import {
+  gotoPrevPage,
+  setOtpError,
+  showLoader,
+  removeLoader,
+} from "../store/slices/loginSlice";
+import useKeyboardStatus from "../customHooks/useKeyboardStatus";
+import Loader from "../components/Loader";
 
 const LoginScreen = ({ navigation }) => {
+  const { pageNo, mobileNumber, loading, loadingMessage, otpError } =
+    useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const keyboardStatus = useKeyboardStatus();
+
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -13,18 +33,58 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Header />
-      <LoginContent />
+    <View
+      style={[
+        styles.container,
+        { marginBottom: keyboardStatus === "open" ? 50 : 175 },
+      ]}
+    >
+      {loading && <Loader message={loadingMessage} />}
+      <Header
+        title={"LOGIN OR REGISTER"}
+        showBackButton={pageNo === 2}
+        onBackPress={() => dispatch(gotoPrevPage())}
+      />
+      {pageNo === 1 && <LoginContent />}
+      {pageNo === 2 && <Otp {...getPropsForOtp()} />}
     </View>
   );
+
+  function getPropsForOtp() {
+    return {
+      mobileNumber,
+      otpLength: 4,
+      onResend: async () => {
+        dispatch(showLoader('Resending Otp...'))
+        await delay(2000);
+        dispatch(removeLoader());
+      },
+      onSubmit: async (value) => {
+        dispatch(showLoader('Verifying Otp...'))
+        dispatch
+        await delay(2000);
+        if (value !== "4444") {
+          dispatch(setOtpError("Invalid OTP. Please try again"));
+        }
+        dispatch(removeLoader(false));
+      },
+      otpError: otpError,
+      setOtpError: (error) => {
+        dispatch(setOtpError(error));
+      },
+    };
+  }
+};
+
+const delay = (delayInms) => {
+  return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
 
 const LoginContent = () => {
   return (
     <View style={styles.contentContainer}>
       <LoginForm />
-      <FeatureCarousel />
+      <FeatureCarousel/>
     </View>
   );
 };
@@ -38,6 +98,5 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: 175
   },
 });
