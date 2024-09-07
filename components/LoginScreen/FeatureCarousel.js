@@ -1,10 +1,10 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import QuickQuoteFeatureCard from "../assets/images/quickQuoteFeatureCard.svg";
-import SaveAndShareFeatureCard from "../assets/images/saveAndShareFeatureCard.svg"
 import { useSharedValue } from "react-native-reanimated";
 import Carousel, { Pagination } from "react-native-reanimated-carousel";
-import colors from "../constants/colors";
+import colors from "../../constants/colors";
+import QuickQuoteFeatureCard from "../../assets/images/quickQuoteFeatureCard"
+import SaveAndShareFeatureCard from "../../assets/images/saveAndShareFeatureCard"
 
 const featuresArray = [
   {

@@ -1,9 +1,9 @@
 import { KeyboardAvoidingView, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import OutlineInput from "./OutlineInput";
-import NextButtonRound from "./NextButtonRound";
+import OutlineInput from "../OutlineInput";
+import NextButtonRound from "../NextButtonRound";
 import { useDispatch, useSelector } from "react-redux";
-import { gotoNextPage, setMobileNumber } from "../store/slices/loginSlice";
+import { gotoNextPage, setMobileNumber } from "../../store/slices/loginSlice";
 
 const NextButton = ({onPress}) => {
   return (

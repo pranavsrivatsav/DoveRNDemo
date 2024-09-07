@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import Header from "../components/Header";
-import LoginForm from "../components/LoginForm";
-import FeatureCarousel from "../components/FeatureCarousel";
+import LoginForm from "../components/LoginScreen/LoginForm";
+import FeatureCarousel from "../components/LoginScreen/FeatureCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import Otp from "../components/Otp";
 import {
@@ -84,7 +84,7 @@ const LoginContent = () => {
   return (
     <View style={styles.contentContainer}>
       <LoginForm />
-      <FeatureCarousel />
+      <FeatureCarousel/>
     </View>
   );
 };
