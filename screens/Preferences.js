@@ -12,6 +12,7 @@ import {
   setInsurerSelection,
 } from "../store/slices/preferencesSlice";
 import { bindActionCreators } from "@reduxjs/toolkit";
+import CustomScrollWrapper from "../components/wrappers/CustomScrollWrapper";
 
 export const InsurerPreferencesContext = React.createContext();
 
@@ -20,11 +21,31 @@ const Preferences = () => {
   const dispatch = useDispatch();
   const { alias, insurers } = useSelector((state) => state.preferences);
   const actions = useMemo(
-    () => bindActionCreators({ setInsurerSelection, setAlias, initializePreferences }, dispatch),
+    () =>
+      bindActionCreators(
+        { setInsurerSelection, setAlias, initializePreferences },
+        dispatch
+      ),
     [dispatch]
   );
 
   const defaultInsurers = [
+    {
+      name: "Acko",
+      isSelected: false,
+    },
+    {
+      name: "Star Health",
+      isSelected: false,
+    },
+    {
+      name: "Bajaj Allianz",
+      isSelected: false,
+    },
+    {
+      name: "Hdfc Ergo",
+      isSelected: false,
+    },
     {
       name: "Acko",
       isSelected: false,
@@ -50,16 +71,13 @@ const Preferences = () => {
     actions.initializePreferences({
       insurers: defaultInsurers,
       alias: "default",
-    })
+    });
   }, []);
 
   function renderContent() {
     return (
       <View style={styles.content}>
-        <AliasSection
-          value={alias}
-          onChange={actions.setAlias}
-        />
+        <AliasSection value={alias} onChange={actions.setAlias} />
         <InsurerPreferencesSection
           insurers={insurers}
           setSelection={actions.setInsurerSelection}
@@ -91,10 +109,20 @@ function AliasSection({ value, onChange }) {
 
 function InsurerPreferencesSection({ insurers, setSelection }) {
   return (
-    <>
+    <View style={{flex: 1}}>
       <SectionHeader title={"SELECT INSURERS"} />
-      <SelectInsurers insurers={insurers} setSelection={setSelection} />
-    </>
+      <CustomScrollWrapper>
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+        <SelectInsurers insurers={insurers} setSelection={setSelection} />
+      </CustomScrollWrapper>
+    </View>
   );
 }
 
@@ -105,6 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    flex: 1,
     marginTop: 10,
     paddingHorizontal: 12,
   },
